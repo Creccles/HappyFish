@@ -1,9 +1,9 @@
 import playingCard
-from src.playingCard import PlayingCard
+
 
 
 class HappyFishes:
-    playingcard = PlayingCard()
+    playingcard = playingCard.PlayingCard()
 
     def who_turn(self, hands, number_players, current_player):
         Scored_cards = 1
@@ -23,10 +23,10 @@ class HappyFishes:
     
 
 
-    def select_player(self, hands, number_players):
+    def select_player(self, hands, number_players, current_player):
         chosen_player = - 1
-        while chosen_player < 0 or chosen_player > int(number_players):
-            chosen_player = int(input("Which player would you like to ask?")) - 1
+        while chosen_player < 0 or chosen_player > int(number_players) and chosen_player != current_player:
+                chosen_player = int(input("Which player would you like to ask?")) - 1
 
         print("You have chosen Player: ", (chosen_player + 1))
         #vvvvvvvvvvvvvvvvvv
@@ -34,15 +34,15 @@ class HappyFishes:
         #^ONLY FOR TESTING^
         return chosen_player
 
-
     def ask_player(self, hands, current_player, chosen_player):
+
         print(hands[current_player], "this is your hand")
+
         player_card = []
 
         for index in range(len(hands[current_player]) - 1):
             print(hands[current_player][index][1:])
-            player_card = hands[current_player][index][1:]
-            #print(player_card[index]) # prints first value then crashes----------------------
+            player_card.append(hands[current_player][index][1:])
 
         whatToAsk = input('What card are you looking for')
 
@@ -50,13 +50,11 @@ class HappyFishes:
             print("You picked a valid card")
         else:
             print("You DID NOT pick a valid card")
-
-
-
+            self.ask_player(hands, current_player, chosen_player)
 
     def main(self):
 
-        current_player = 1
+        current_player = 0
 
         number_players = int(input("How many players will there be?"))
         deck = self.playingcard.generate_deck()
@@ -64,7 +62,7 @@ class HappyFishes:
         hands = self.playingcard.deal_cards(deck, 7, number_players)
         print(hands)
         self.who_turn(hands, number_players, current_player)
-        chosen_player = self.select_player(hands, number_players)
+        chosen_player = self.select_player(hands, number_players, current_player)
         self.ask_player(hands, current_player, chosen_player)
 
 if __name__ == '__main__':
